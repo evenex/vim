@@ -13,6 +13,8 @@ au BufNewFile,BufRead *.cl setf opencl
 au BufNewFile,BufRead *.d set foldmethod=syntax
 au BufNewFile,BufRead *.i,*.c set syntax=c|set foldmethod=syntax
 au BufNewFile,BufRead *.ii,*.h,*.cpp set syntax=cpp|set foldmethod=syntax
+au BufNewFile,BufRead *.math set syntax=math
+au FileType javascript call JavaScriptFold()
 	
 " GUI OPTIONS
 set guioptions-=T " no toolbar
@@ -110,6 +112,10 @@ au BufNewFile,BufRead *.c,*.cpp command! F call CRun()
 au BufNewFile,BufRead *.d command! T call DUnitTest()
 au BufNewFile,BufRead *.d command! F call DRun()
 
+au BufNewFile,BufRead *.d command! F call DRun()
+
+au FileType javascript command! F call SNSRun();
+
 command! I call ShowProjectInfo()
 command! D call StartDebugger()
 
@@ -129,6 +135,11 @@ function! DRun()
 	setlocal buftype=nofile
 	call append (0, split(log, '\n'))
 	call DSyntax ()
+endfunction
+
+function! SNSRun()
+	call CRun()
+	execute "!chromium --new-window www.sitnsleepfurniture.com"
 endfunction
 
 function! DUnitTest()
@@ -247,6 +258,8 @@ let @n = 'au2115'
 let @s = 'A {€K8€K9}€K9€K8}€kuf}h'
 " create mixin block
 let @m = 'amixin(q{});O	'
+" create a doc comment
+let @d = 'O€K8€K9€K9€K8€kl€klaO	'
 
 " DEBUGGER MOVEMENTS
 map <F3> :C bt <CR>

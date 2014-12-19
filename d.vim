@@ -122,6 +122,7 @@ syn keyword dTraitsIdentifier      contained getVirtualFunctions
 syn keyword dTraitsIdentifier      contained getVirtualMethods parent
 syn keyword dTraitsIdentifier      contained classInstanceSize allMembers
 syn keyword dTraitsIdentifier      contained derivedMembers isSame compiles
+syn keyword dTraitsIdentifier      contained isTemplate
 syn keyword dPragmaIdentifier      contained lib msg startaddress GNU_asm
 syn keyword dExternIdentifier      contained Windows Pascal Java System D
 syn keyword dAttribute             contained safe trusted system
@@ -566,14 +567,15 @@ syn keyword dAsmOpCode contained	adc
 syn match Special "\<\(fann\|Pa_\|cv\|cp\|d\|Derelict\|FT_\|gl\(fw\)\?\|DAQmx\)[A-Z]\w\+\>\s*\((\)\@=" containedin=ALLBUT,@dComment,dString,dImport " other people's libs
 syn match Underlined "\<\(fann\|pa\|cv\|cp\|d\|Derelict\|ft\|gl\(fw\)\?\|DAQmx\)[.][A-Z]\w\+\>" containedin=ALLBUT,@dComment,dString,dImport " other people's libs
 syn match Underlined "\<https\?\>[:].\{-}\>\(\s\|$\)" containedin=ALL " web reference
-syn match dType "\<[TUVWRSFGH]\>" "generic type standins
+syn match dType "\<[TUVWRSFGHM]\>" "generic type standins
 syn match dType "\<_\?[A-Z][A-Za-z_]*[a-z]\+\>" "type names
 syn match dType "\<[iufr]\?vec[0-9]\?\>" "int, uint, float, real
 syn match dType "\<Id\>" "id types
 syn match dType "\<\w\+_t\>" "c-style typenames
 syn match dType "\<cpVect\>" "chipmunk2D vectors
+syn match dType "\<Λ\(!\)\@=\>" "type-level lambda function
 syn match Normal "\<Pa_\w\+\>" "portaudio function calls
-syn keyword dStatement not
+syn keyword dStatement not and or
 syn match dStatement "\([!=<>]=\|[&|]\{2}\|\s[<>]\s\)" "logic and comparison operators
 syn match dDec "\([.]\)\@<!\([.][.]\)\([^.].*]\)\@=" containedin=ALL "range slice operators
 
