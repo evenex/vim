@@ -7,6 +7,9 @@ colorscheme solarized
 set background=dark
 syntax enable
 
+" THAT FUCKING BEEP
+set visualbell
+
 " SYNTAX CONTROL
 au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl set syntax=glsl
 au BufNewFile,BufRead *.cl setf opencl
@@ -14,7 +17,6 @@ au BufNewFile,BufRead *.d set foldmethod=syntax
 au BufNewFile,BufRead *.i,*.c set syntax=c|set foldmethod=syntax
 au BufNewFile,BufRead *.ii,*.h,*.cpp set syntax=cpp|set foldmethod=syntax
 au BufNewFile,BufRead *.math set syntax=math
-au FileType javascript call JavaScriptFold()
 	
 " GUI OPTIONS
 set guioptions-=T " no toolbar
@@ -114,7 +116,7 @@ au BufNewFile,BufRead *.d command! F call DRun()
 
 au BufNewFile,BufRead *.d command! F call DRun()
 
-au FileType javascript command! F call SNSRun();
+au FileType javascript command! F call JSRun();
 
 command! I call ShowProjectInfo()
 command! D call StartDebugger()
@@ -137,9 +139,9 @@ function! DRun()
 	call DSyntax ()
 endfunction
 
-function! SNSRun()
-	call CRun()
-	execute "!chromium --new-window www.sitnsleepfurniture.com"
+function! JSRun()
+	execute "wa"
+	execute "!node %"
 endfunction
 
 function! DUnitTest()
@@ -244,9 +246,9 @@ function! StartDebugger()
 endfunction
 
 " MACROS
-" create fancy block
-let @f = 'o{}€kl€K8€K9€K9€K8€kl€kl...}€kr€krzc>>zoo	' 
-" collapse fancy brace into single line
+" create block
+let @f = 'o{}€klO	'
+" collapse block into single line
 let @r = 'k0f{lDa€kD€krdwA €kDdw' 
 " convert camelCase to underscores
 let @u = 'vaw:s/[a-z]-€kb[€kb€kl€kl€kl€kl€kl\(€kr€kr€kr€kr€kr\)\([A-Z]\)/\1_\L\2/g' 
@@ -254,12 +256,16 @@ let @u = 'vaw:s/[a-z]-€kb[€kb€kl€kl€kl€kl€kl\(€kr€kr€kr€kr€kr\)\([A-Z]\)/\1_\L\2
 let @c = 'vaw:s/_\(\_€kb)€kl€kl.€kr€kr/€kl€kl€kl€kb[a-z]€kr€kr€kr\U\1/g' 
 " natural numbers
 let @n = 'au2115'
-" create section
-let @s = 'A {€K8€K9}€K9€K8}€kuf}h'
+" integers
+let @z = 'au2124'
+" create egyptian block
+let @s = 'A€ü {}€klO	'
 " create mixin block
 let @m = 'amixin(q{});O	'
 " create a doc comment
 let @d = 'O€K8€K9€K9€K8€kl€klaO	'
+" inverse
+let @i = 'a-S1S'
 
 " DEBUGGER MOVEMENTS
 map <F3> :C bt <CR>
@@ -281,3 +287,14 @@ command! -nargs=1 P call GDBPrint (<f-args>)
 command! R call GDBRun ()
 command! -nargs=1 B call GDBBreak (<f-args>)
 command! BT call GDBBackTrace ()
+
+" modify selected text using combining diacritics
+command! -range -nargs=0 Overline        call s:CombineSelection(<line1>, <line2>, '0305')
+command! -range -nargs=0 Underline       call s:CombineSelection(<line1>, <line2>, '0332')
+command! -range -nargs=0 DoubleUnderline call s:CombineSelection(<line1>, <line2>, '0333')
+command! -range -nargs=0 Strikethrough   call s:CombineSelection(<line1>, <line2>, '0336')
+
+function! s:CombineSelection(line1, line2, cp)
+  execute 'let char = "\u'.a:cp.'"'
+  execute a:line1.','.a:line2.'s/\%V[^[:cntrl:]]/&'.char.'/ge'
+endfunction
